@@ -21,9 +21,9 @@ export interface User extends Document {
   username: string;
   email: string;
   password: string;
-  isVerified: boolean;
   verifyCode: string;
   verifyCodeExpiry: Date;
+  isVerified: boolean;
   isAcceptingMessages: boolean;
   messages: Message[];
 }
@@ -63,9 +63,15 @@ const UserSchema: Schema<User> = new Schema({
   },
   messages: [MessageSchema],
 });
-
+/* It checks if the "User" model already exists in Mongoose. */
 const UserModel =
-  (mongoose.models.User as mongoose.Model<User>) ||
-  mongoose.model<User>("User", UserSchema);
+  (mongoose.models
+    .User as mongoose.Model<User>) /* If it already exists, use the existing one */ ||
+  mongoose.model<User>(
+    "User",
+    UserSchema
+  ); /* If it doesn't exist yet, define it using the schema: */
+
+/* This line prevents errors when the code runs multiple times and makes sure that the "User" model is only defined once. */
 
 export default UserModel;
