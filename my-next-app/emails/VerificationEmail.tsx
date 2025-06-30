@@ -14,11 +14,9 @@ import {
 } from "@react-email/components";
 import * as React from "react";
 
-interface VerificationEmailProps {
-  username: string;
-  otp: string;
-  baseUrl?: string;
-}
+// Add this line for better email client compatibility
+// @ts-ignore
+export const contentType = "text/html";
 
 // Email-safe colors
 const colors = {
@@ -28,79 +26,6 @@ const colors = {
   muted: "#6B7280",
   light: "#E5E7EB",
 };
-
-export default function VerificationEmail({
-  username,
-  otp,
-  baseUrl = "http://localhost:3000",
-}: VerificationEmailProps) {
-  return (
-    <Html lang="en">
-      <Head>
-        <title>Email Verification Code</title>
-        <Font
-          fontFamily="Inter"
-          fallbackFontFamily={["Helvetica", "Arial", "sans-serif"]}
-          webFont={{
-            url: "https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap",
-            format: "woff2",
-          }}
-          fontWeight={400}
-          fontStyle="normal"
-        />
-      </Head>
-      <Preview>Your verification code: {otp}</Preview>
-      <Body style={bodyStyle}>
-        <Container style={containerStyle}>
-          <Heading as="h1" style={headingStyle}>
-            Verify Your Account
-          </Heading>
-
-          <Text style={textStyle}>Hello {username},</Text>
-
-          <Text style={textStyle}>
-            Thank you for creating an account. Please use the verification code
-            below to complete your registration:
-          </Text>
-
-          <Section style={codeContainerStyle}>
-            <Text style={codeStyle}>{otp}</Text>
-          </Section>
-
-          <Text style={textStyle}>
-            This code will expire in 10 minutes. If you did not request this
-            verification, please ignore this email.
-          </Text>
-
-          <Section style={buttonContainerStyle}>
-            <Button
-              href={`${baseUrl}/verify?code=${otp}`}
-              style={buttonStyle}
-              pX={20}
-              pY={12}
-            >
-              Verify Account
-            </Button>
-          </Section>
-
-          <Hr style={hrStyle} />
-
-          <Text style={footerStyle}>
-            If you're having trouble with the button above, copy and paste the
-            URL below into your web browser:
-          </Text>
-          <Link href={`${baseUrl}/verify?code=${otp}`} style={linkStyle}>
-            {`${baseUrl}/verify?code=${otp}`}
-          </Link>
-
-          <Text style={footerSmallStyle}>
-            © {new Date().getFullYear()} Your Company. All rights reserved.
-          </Text>
-        </Container>
-      </Body>
-    </Html>
-  );
-}
 
 // Email-safe styles
 const bodyStyle: React.CSSProperties = {
@@ -194,3 +119,100 @@ const footerSmallStyle: React.CSSProperties = {
   margin: "24px 0 0",
   textAlign: "center",
 };
+
+interface VerificationEmailProps {
+  username: string;
+  otp: string;
+  baseUrl?: string;
+}
+
+export default function VerificationEmail({
+  username,
+  otp,
+  baseUrl = "http://localhost:3000",
+}: VerificationEmailProps) {
+  return (
+    <Html lang="en">
+      <Head>
+        <title>Email Verification Code</title>
+        <Font
+          fontFamily="Inter"
+          fallbackFontFamily={["Helvetica", "Arial", "sans-serif"]}
+          webFont={{
+            url: "https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap",
+            format: "woff2",
+          }}
+          fontWeight={400}
+          fontStyle="normal"
+        />
+      </Head>
+      <Preview>Your verification code: {otp}</Preview>
+      <Body style={bodyStyle}>
+        <Container style={containerStyle}>
+          <Heading as="h1" style={headingStyle}>
+            Verify Your Account
+          </Heading>
+
+          <Text style={textStyle}>Hello {username},</Text>
+
+          <Text style={textStyle}>
+            Thank you for creating an account. Please use the verification code
+            below to complete your registration:
+          </Text>
+
+          <Section style={codeContainerStyle}>
+            <Text style={codeStyle}>{otp}</Text>
+          </Section>
+
+          <Text style={textStyle}>
+            This code will expire in 10 minutes. If you did not request this
+            verification, please ignore this email.
+          </Text>
+
+          <Section style={buttonContainerStyle}>
+            <Button
+              href={`${baseUrl}/verify?code=${otp}`}
+              style={buttonStyle}
+              pX={20}
+              pY={12}
+            >
+              Verify Account
+            </Button>
+          </Section>
+
+          <Hr style={hrStyle} />
+
+          <Text style={footerStyle}>
+            If you're having trouble with the button above, copy and paste the
+            URL below into your web browser:
+          </Text>
+          <Link href={`${baseUrl}/verify?code=${otp}`} style={linkStyle}>
+            {`${baseUrl}/verify?code=${otp}`}
+          </Link>
+
+          <Text style={footerSmallStyle}>
+            © {new Date().getFullYear()} Your Company. All rights reserved.
+          </Text>
+        </Container>
+      </Body>
+    </Html>
+  );
+}
+
+// Sending email using Resend
+export async function sendVerificationEmail(
+  email: string,
+  username: string,
+  verifyCode: string
+) {
+  await resend.emails.send({
+    from: "dev@example.com",
+    to: email,
+    subject: "Mystery Message Verification Code",
+    react: React.createElement(VerificationEmail, {
+      username,
+      otp: verifyCode,
+      baseUrl: process.env.NEXT_PUBLIC_BASE_URL,
+    }),
+  });
+}
