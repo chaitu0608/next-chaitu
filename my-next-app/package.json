@@ -11,6 +11,7 @@
   "dependencies": {
     "@react-email/components": "^0.1.1",
     "bcryptjs": "^3.0.2",
+    "framer-motion": "^12.23.0",
     "mongoose": "^8.16.0",
     "next": "15.3.4",
     "react": "^19.1.0",
@@ -26,7 +27,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "15.3.4",
-    "tailwindcss": "^4",
+    "tailwindcss": "^4.1.11",
     "typescript": "^5"
   }
 }
