@@ -10,10 +10,40 @@ export const authOptions: NextAuthOptions = {
       id: "credentials",
       name: "Credentials",
       credentials: {
-        username: { label: "Email", type: "text"},
+        email: { label: "Email", type: "text" },
         password: { label: "Password", type: "password" },
       },
-      async authorize(credentials: any): {
+      async authorize(credentials: any): Promise<any> {
+        await dbConnect();
+        try {
+          const user = await UserModel.findOne({
+            $or: [
+              { email: credentials.identifier },
+              { username: credentials.identifier },
+            ],
+          });
+          if (!user) {
+            throw new Error("No user found with the given credentials");
+          }
+
+          if (!user.isVerified) {
+            throw new Error(
+              "User is not verified....Please verify your account first."
+            );
+          }
+          const isPasswordCorrect = await bcrypt.compare(
+            credentials.password,
+            user.password
+          );
+          if (isPasswordCorrect) {
+            return user;
+          } else {
+            throw new Error("Incorrect password");
+          }
+        } catch (error: any) {
+          throw new Error("Database connection failed");
+        }
+      },
     }),
   ],
 };
