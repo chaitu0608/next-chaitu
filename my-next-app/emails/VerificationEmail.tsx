@@ -13,6 +13,9 @@ import {
   Link,
 } from "@react-email/components";
 import * as React from "react";
+import { Resend } from "resend";
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 // Add this line for better email client compatibility
 // @ts-ignore
@@ -91,6 +94,7 @@ const buttonStyle: React.CSSProperties = {
   textDecoration: "none",
   textAlign: "center",
   display: "inline-block",
+  padding: "12px 20px",
 };
 
 const hrStyle: React.CSSProperties = {
@@ -168,14 +172,8 @@ export default function VerificationEmail({
             This code will expire in 10 minutes. If you did not request this
             verification, please ignore this email.
           </Text>
-
           <Section style={buttonContainerStyle}>
-            <Button
-              href={`${baseUrl}/verify?code=${otp}`}
-              style={buttonStyle}
-              pX={20}
-              pY={12}
-            >
+            <Button href={`${baseUrl}/verify?code=${otp}`} style={buttonStyle}>
               Verify Account
             </Button>
           </Section>
