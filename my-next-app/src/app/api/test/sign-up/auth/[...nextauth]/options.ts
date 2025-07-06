@@ -18,8 +18,8 @@ export const authOptions: NextAuthOptions = {
         try {
           const user = await UserModel.findOne({
             $or: [
-              { email: credentials.identifier },
-              { username: credentials.identifier },
+              { email: credentials.email },
+              { username: credentials.email },
             ],
           });
           if (!user) {
@@ -41,7 +41,8 @@ export const authOptions: NextAuthOptions = {
             throw new Error("Incorrect password");
           }
         } catch (error: any) {
-          throw new Error("Database connection failed");
+          console.error("Authorize error:", error);
+          throw new Error(error.message || "Authorization failed");
         }
       },
     }),
@@ -58,6 +59,12 @@ export const authOptions: NextAuthOptions = {
       return token;
     },
     async session({ session, token }) {
+      if (token) {
+        session.user._id = token._id;
+        session.user.isVerified = token.isVerified;
+        session.user.isAcceptingMessages = token.isAcceptingMessages;
+        session.user.username = token.username;
+      }
       return session;
     },
   },
