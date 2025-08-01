@@ -3,6 +3,17 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 export default function Home() {
   const [darkMode, setDarkMode] = useState<boolean>(false);
@@ -114,30 +125,89 @@ export default function Home() {
         </div>
       </header>
 
-      {/* Hero Section */}
+      {/* Hero Section with Login Card */}
       <main className="flex-1">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
-          <div className="text-center">
-            <h1 className="text-4xl font-extrabold text-gray-900 dark:text-white sm:text-5xl sm:tracking-tight lg:text-6xl">
-              Send Anonymous Messages
-            </h1>
-            <p className="mt-6 max-w-2xl mx-auto text-xl text-gray-500 dark:text-gray-300">
-              Connect with people in a more authentic way. Share thoughts,
-              feedback, and messages without revealing your identity.
-            </p>
-            <div className="mt-10 flex justify-center gap-4">
-              <Link
-                href="/sign-up"
-                className="px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-700 dark:hover:bg-indigo-600 md:text-lg"
-              >
-                Get Started
-              </Link>
-              <Link
-                href="/how-it-works"
-                className="px-8 py-3 border border-gray-300 dark:border-gray-600 text-base font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 md:text-lg"
-              >
-                How it Works
-              </Link>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            {/* Left side - Hero content */}
+            <div>
+              <h1 className="text-4xl font-extrabold text-gray-900 dark:text-white sm:text-5xl sm:tracking-tight lg:text-6xl">
+                Send Anonymous Messages
+              </h1>
+              <p className="mt-6 text-xl text-gray-500 dark:text-gray-300">
+                Connect with people in a more authentic way. Share thoughts,
+                feedback, and messages without revealing your identity.
+              </p>
+              <div className="mt-10 flex gap-4">
+                <Link
+                  href="/sign-up"
+                  className="px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-700 dark:hover:bg-indigo-600 md:text-lg"
+                >
+                  Get Started
+                </Link>
+                <Link
+                  href="/how-it-works"
+                  className="px-8 py-3 border border-gray-300 dark:border-gray-600 text-base font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 md:text-lg"
+                >
+                  How it Works
+                </Link>
+              </div>
+            </div>
+
+            {/* Right side - Login Card */}
+            <div className="flex justify-center lg:justify-end">
+              <Card className="w-full max-w-sm">
+                <CardHeader>
+                  <CardTitle>Login to your account</CardTitle>
+                  <CardDescription>
+                    Enter your email below to login to your account
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <form>
+                    <div className="flex flex-col gap-6">
+                      <div className="grid gap-2">
+                        <Label htmlFor="email">Email</Label>
+                        <Input
+                          id="email"
+                          type="email"
+                          placeholder="m@example.com"
+                          required
+                        />
+                      </div>
+                      <div className="grid gap-2">
+                        <div className="flex items-center">
+                          <Label htmlFor="password">Password</Label>
+                          <Link
+                            href="/forgot-password"
+                            className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
+                          >
+                            Forgot your password?
+                          </Link>
+                        </div>
+                        <Input id="password" type="password" required />
+                      </div>
+                    </div>
+                  </form>
+                </CardContent>
+                <CardFooter className="flex-col gap-2">
+                  <Button type="submit" className="w-full">
+                    Login
+                  </Button>
+                  <Button variant="outline" className="w-full">
+                    Login with Google
+                  </Button>
+                  <div className="mt-4 text-center text-sm">
+                    Don&apos;t have an account?{" "}
+                    <Link
+                      href="/sign-up"
+                      className="underline underline-offset-4"
+                    >
+                      Sign up
+                    </Link>
+                  </div>
+                </CardFooter>
+              </Card>
             </div>
           </div>
         </div>
